@@ -2,14 +2,18 @@ from expense import Expense
 
 
 def main() -> None:
-    print("Welcome to the expense tracker! 🤑")
-    expense = get_user_expense()    
-    save_expense_to_file(expense)
-    summarize_expenses()
+    EXPENSES_FILE_PATH = "expenses.csv"
+
+    print("Welcome to the expense tracker! 🤑\n")
+
+    expense = get_user_expense()
+
+    save_expense_to_file(expense, EXPENSES_FILE_PATH)
+    
+    summarize_expenses(EXPENSES_FILE_PATH)
 
 
 def get_user_expense() -> Expense:
-    print("Getting user expense...")
     expense_name = input("Enter expense name: ")
     expense_amount = float(input("Enter expense amount ($): "))
 
@@ -43,12 +47,16 @@ def get_user_expense() -> Expense:
             print("🔴 Invalid option. Please try again!\n")
 
 
-def save_expense_to_file(expense: Expense) -> None:
-    print(f"Saving {expense.category} expense {expense.name} (${expense.amount}) to file...")
+def save_expense_to_file(expense: Expense, file_path: str) -> None:
+    with open(file_path, "a", encoding="utf-8") as file:
+        file.write(f"{expense.name}, {expense.category}, {expense.amount}\n")
+
+    print(
+        f"\nYou've added {expense.name} (${expense.amount}) to your expenses of {expense.category} category.\n")
 
 
-def summarize_expenses():
-    print("Summarizing user expenses...")
+def summarize_expenses(file_path: str):
+    print(f"Summarizing user expenses from {file_path} file...")
 
 
 if __name__ == "__main__":
